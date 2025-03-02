@@ -1,4 +1,5 @@
 #include "general.h"
+#include "math.h"
 
 //TODO: fix mark deleting types
 
