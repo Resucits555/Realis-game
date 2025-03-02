@@ -27,11 +27,33 @@ The simulation is a grid of cells. Each cell consists of:
 
 To make "moving solids" possible, the sim has objects, which could be described as a connection of cells. It contains:
 - linVelocity: linear general velocity
-(it's still unknown if an "object" will be a struct because of lack of uses it will give)
+
+(it's still unknown if "object" will be a struct because of the lack of uses it will give)
 
 The variables of each struct are not locked in,
 they're still actively changing for the project requirements as the project is very raw and in the starting phase.
 In other words, the whole concept and this paragraph could change drastically any time.
+
+How many features will be in the end product depends on the speed of it.
+Therefore the code should be highly optimised and memory efficient to make playing on relatively weak computers possible too.
+
+
+## Movement, force and cells
+
+The simulation is based around force. Force should be everywhere, like in reality.
+
+How a cell should behave is not fully known yet, but that's what I already came up with:
+Imagine a 3x3px quadratic object out of cells with the same type.
+The middle one has connections to the cells in a one pixel radius around it.
+These should always stay in the radius and only can move around the cell to make the object rotate.
+A cell can only disconnect if the force is more than the element can withstand.
+Any force given to one of the cells should be distibuted to the other cells and cannot vanish (conservation of energy).
+The amount of cells can only be changed by drawing and deleting with the mouse.
+
+Bending objects are realised with the "origin" variable. It points to the position where the cell would be if there is no pressure.
+There should always be generated a force in direction to origin based on the distance.
+
+Any suggestions to give more clarity how the sim should work at the end would be highly appreciated.
 
 
 ## Compilation
@@ -47,3 +69,5 @@ When finished, you can use Visual studio to compile the project through the solu
 ## Current state
 
 The project is in it's very starting phase. Right now it's just like a very bad paint replica with one color and one shape.
+
+The sim is very small but should be made bigger in future. Now the size is just enough to test the current features.
