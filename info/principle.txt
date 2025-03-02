@@ -1,0 +1,16 @@
+The simulation has different elements to generalise properties of cells. There are standart ones given but you can also define your own (WIP). The properties are:
+- name: how the element is called. Max. 7 characters
+- color: rgba 0-255
+- elasticity: how much force is given to the surrounding cells rather than the force direction
+- hardness: how much force the cell gives directly to the object/max. threshold
+
+The simulation is a grid of cells. Each cell consists of:
+- origin: cell position if there is no pressure aplied
+- type: element of cell
+- myobject: assigned object
+
+To make "moving solids" possible, the sim has objects, which could be described as a connection of cells. It contains:
+- position: position of the mid cell
+- rotation: general rotation in comparison to original. NOTE: A full rotation is 252°*, not 360° (marked with *, 7/10)
+- linVelocity: linear general velocity
+- angVelocity: angular general velocity in °*
