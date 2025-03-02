@@ -7,5 +7,5 @@ To compile you need to:
 1. Create a new folder build
 2. Go to that folder in the console
 3. Type "cmake .."
-4. 
+
 When finished, you can use Visual studio to compile the project through the solution
