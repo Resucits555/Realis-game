@@ -38,6 +38,7 @@ extern std::vector<element> elements;
 
 struct cell {
 	position origin;
+	velocity linVelocity;
 	unsigned char type;
 	unsigned char myobject;
 };

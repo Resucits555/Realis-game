@@ -1,14 +1,12 @@
 #include "general.h"
 #include "math.h"
 
-//TODO: fix mark deleting types
-
 static sf::Vector2f start;
 
 static void DrawRect(unsigned char type, sf::Vector2f& max, sf::Vector2f& min) {
 	for (unsigned short y = min.y; y < max.y; y++) {
 		for (unsigned short x = min.x; x < max.x; x++) {
-			cells[y][x] = { {x, y} , type, (unsigned char)objects.size()};
+			cells[y][x] = { {x, y} , {}, type, (unsigned char)objects.size()};
 		}
 	}
 }
