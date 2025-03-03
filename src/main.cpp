@@ -11,15 +11,15 @@ static void ProcessObjects() {
 }
 
 
-std::vector<element> elements{ {},    //first element is none
-    { "elem", sf::Color::Blue } };    //[testing element]
+std::vector<element> elements{ { "none" },
+    { "elem", sf::Color::Yellow, POWDER } }; //[testing element]
 unsigned char formSelected = 0;
 
 
 int main()
 {
     auto window = sf::RenderWindow(sf::VideoMode({ 1920u, 980u }), "CMake SFML Project");
-    window.setFramerateLimit(144);
+    window.setFramerateLimit(60);
     window.setKeyRepeatEnabled(false);
 
 
@@ -33,7 +33,7 @@ int main()
             {
                 window.close();
             }
-            /*else if (const auto* input = event->getIf<sf::Event::TextEntered>()) {
+            /*else if (const auto* input = event->getIf<sf::Event::TextEntered>()) { //Use for text input
                 const char typed = static_cast<char>(input->unicode);
 
             }*/
@@ -48,16 +48,20 @@ int main()
                 }
             }
             else if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>()) {
-                if (mousePressed->button == sf::Mouse::Button::Left)
+                if (mousePressed->button == sf::Mouse::Button::Left ||
+                    mousePressed->button == sf::Mouse::Button::Right)
                     Draw(window, 1);
             }
             else if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonReleased>()) {
                 if (mousePressed->button == sf::Mouse::Button::Left)
                     Draw(window, 2);
+                else if (mousePressed->button == sf::Mouse::Button::Right)
+                    Draw(window, 3);
             }
         }
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) || 
+            sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
             sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
             if (mousePosition.x > 0 && mousePosition.y > 0)

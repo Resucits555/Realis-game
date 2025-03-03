@@ -11,8 +11,7 @@ there should be a built in "element creator" to create materials with all kinds 
 
 ## Concept
 
-The simulation has different elements to generalise properties of cells.
-There are standart ones given but you can also define your own (WIP). The properties are:
+The simulation has different elements to generalise properties of cells. The properties are:
 - name: how the element is called. Max. 7 characters
 - color: rgba 0-255
 - mass: how heavy the element is
@@ -22,7 +21,7 @@ There are standart ones given but you can also define your own (WIP). The proper
 The simulation is a grid of cells. Each cell consists of:
 - origin: cell position if there is no pressure aplied
 - linVelocity: speed of the cell in a certain direction
-- type: element of cell
+- type: element of the cell
 - myobject: assigned object
 
 To make "moving solids" possible, the sim has objects, which could be described as a connection of cells. It contains:
@@ -32,10 +31,12 @@ To make "moving solids" possible, the sim has objects, which could be described 
 
 The variables of each struct are not locked in,
 they're still actively changing for the project requirements as the project is very raw and in the starting phase.
-In other words, the whole concept and this paragraph could change drastically any time.
+In other words, the whole concept and this paragraph will change a lot through the time.
 
 How many features will be in the end product depends on the speed of it.
 Therefore the code should be highly optimised and memory efficient to make playing on relatively weak computers possible too.
+
+The simulation should also have liquids and gases but these are far easier to simulate.
 
 
 ## Movement, force and cells
@@ -44,30 +45,37 @@ The simulation is based around force. Force should be everywhere, like in realit
 
 How a cell should behave is not fully known yet, but that's what I already came up with:
 Imagine a 3x3px quadratic object out of cells with the same type.
-The middle one has connections to the cells in a one pixel radius around it.
-These should always stay in the radius and only can move around the cell to make the object rotate.
+Each one has connections to the cells in a one pixel radius around it, so the middle one is connected to all the other cells.
+These should always stay in the radius and only can move around the middle cell to make the object rotate.
 A cell can only disconnect if the force is more than the element can withstand.
-Any force given to one of the cells should be distibuted to the other cells and cannot vanish (conservation of energy).
+Any force given to one of the cells should be distributed to the other cells and cannot vanish (conservation of energy).
 The amount of cells can only be changed by drawing and deleting with the mouse.
 
-Bending objects are realised with the "origin" variable. It points to the position where the cell would be if there is no pressure.
-There should always be generated a force in direction to origin based on the distance.
+Both force and velocity of a cell are represented by the same variable "linVelocity" as they're mutually exclusive:
+Only one of them is useful at a time.
 
-Any suggestions to give more clarity how the sim should work at the end would be highly appreciated.
+Bending objects are realised with the "origin" variable. It points to the position where the cell would be if there was no pressure.
+There should always be generated a force in direction to origin based on the distance.
 
 
 ## Compilation
 
-To compile you need to:
+For compilation you need cmake and git.
+
+In Visual Studio, do the following:
 1. Create a new folder build
 2. Go to that folder in the console
 3. Type "cmake .."
 
-When finished, you can use Visual studio to compile the project through the solution
+When finished, set "main" as the startup project in view/solution explorer and run the project
+
+If you use something else, I can't help.
 
 
 ## Current state
 
-The project is in it's very starting phase. Right now it's just like a very bad paint replica with one color and one shape.
+The project is in it's very starting phase.
 
 The sim is very small but should be made bigger in future. Now the size is just enough to test the current features.
+
+The name is not fixed, it could change anytime.
