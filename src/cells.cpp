@@ -16,7 +16,7 @@ void ProcessCells() {
 			if (!thisCell.type)
 				continue;
 
-			vector2s& pos = thisCell.position;
+			vector2s& pos = thisCell.pos;
 
 			if (y < cellsY-1) {
 				thisCell.linVelocity.y++;
@@ -44,7 +44,7 @@ void ProcessCells() {
 					moveCell.linVelocity.x += thisCell.linVelocity.x;
 				else {
 					moveCell = thisCell;
-					moveCell.position.x = 0;
+					moveCell.pos.x = 0;
 					thisCell = {};
 				}
 			}
@@ -55,7 +55,7 @@ void ProcessCells() {
 					moveCell.linVelocity.y += thisCell.linVelocity.y;
 				else {
 					moveCell = thisCell;
-					moveCell.position.y = 0;
+					moveCell.pos.y = 0;
 					thisCell = {};
 				}
 			}

@@ -48,7 +48,7 @@ extern std::vector<element> elements;
 
 struct cell {
 	position origin;
-	vector2s position;
+	vector2s pos;
 	unsigned char type;
 	unsigned char state;
 	unsigned short myobject;
