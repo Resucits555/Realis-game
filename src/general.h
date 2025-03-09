@@ -48,7 +48,7 @@ extern std::vector<element> elements;
 
 struct cell {
 	position origin;
-	vector2s pos;
+	vector2s move;
 	unsigned char type;
 	unsigned char state;
 	unsigned short myobject;
@@ -58,6 +58,7 @@ struct cell {
 const unsigned short cellsX = 40, cellsY = 20;
 extern cell cells[cellsY][cellsX];
 const float cellSize = 40.0f;
+const cell empty = { {0,0}, {0,0}, 0, 0, 0, {0, 0} };
 
 
 

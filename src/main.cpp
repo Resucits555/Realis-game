@@ -12,7 +12,8 @@ static void ProcessObjects() {
 
 
 std::vector<element> elements{ { "none" },
-    { "elem", sf::Color::Yellow, POWDER } }; //[testing element]
+    { "elem1", sf::Color::Yellow, POWDER, 100 },
+    { "elem2", sf::Color::Blue, POWDER, 100 } };
 unsigned char formSelected = 0;
 
 

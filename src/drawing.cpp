@@ -10,7 +10,6 @@ static void DrawRect(unsigned char type, sf::Vector2f& max, sf::Vector2f& min) {
 			cell& thisCell = cells[y][x];
 			thisCell.type = type;
 			thisCell.origin = { x, y };
-			thisCell.myobject = objects.size();
 			thisCell.state = elements[type].spawnState;
 		}
 	}
@@ -50,11 +49,9 @@ void Draw(sf::RenderWindow& window, unsigned char mouseEvent) {
 			break;
 
 		case 2:
-			objects.push_back({ {0, 0} });
 			DrawRect(typeSelected, max, min);
 			break;
 		case 3:
-			objects.push_back({ {0, 0} });
 			DrawRect(0, max, min);
 			break;
 	}
