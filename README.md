@@ -12,7 +12,7 @@ there should be a built in "element creator" to create materials with all kinds 
 ## Concept
 
 The simulation has different elements to generalise properties of cells. The properties are:
-- name: how the element is called. Max. 7 characters
+- name: how the element is called. Max. 5 characters
 - color: rgba 0-255
 - spawnState: the state an element spawns with
 - mass: how heavy the element is

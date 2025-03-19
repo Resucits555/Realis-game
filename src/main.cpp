@@ -1,32 +1,23 @@
 #include "general.h"
 
 
-static void ProcessObjects() {
-    for (int i = 0; i < objects.size(); i++) {
-        object& thisObject = objects[i];
-
-        if (thisObject.linVelocity.y < 127)
-            thisObject.linVelocity.y += 1;
+static void clearSave() {
+    for (int x = 0; x < cellsX; x++) {
+        for (int y = 0; y < cellsY; y++) {
+            cells[y][x] = {};
+        }
     }
 }
 
 
-std::vector<element> elements{ { "none" },
-    { "elem1", sf::Color::Yellow, POWDER, 100 },
-    { "elem2", sf::Color::Blue, POWDER, 100 } };
-unsigned char formSelected = 0;
-
 
 int main()
 {
-    auto window = sf::RenderWindow(sf::VideoMode({ 1920u, 980u }), "CMake SFML Project");
-    window.setFramerateLimit(60);
-    window.setKeyRepeatEnabled(false);
-
+    Startup();
 
     while (window.isOpen())
     {
-        window.clear(sf::Color::Black);
+        window.clear();
 
         while (const std::optional event = window.pollEvent())
         {
@@ -34,30 +25,41 @@ int main()
             {
                 window.close();
             }
-            /*else if (const auto* input = event->getIf<sf::Event::TextEntered>()) { //Use for text input
+            /*else if (const auto* input = event->getIf<sf::Event::TextEntered>()) {    Use this for text input
                 const char typed = static_cast<char>(input->unicode);
 
             }*/
             else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                 switch (keyPressed->scancode) {
-                    case sf::Keyboard::Scancode::C:
+                    case sf::Keyboard::Scancode::Tab:
                         if (formSelected < 2)
                             formSelected++;
                         else
                             formSelected = 0;
                         break;
+                    case sf::Keyboard::Scancode::C:
+                        clearSave();
+                        break;
+                    case sf::Keyboard::Scancode::Escape:
+                        mainWindow.active = false;
+                        break;
                 }
             }
             else if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>()) {
-                if (mousePressed->button == sf::Mouse::Button::Left ||
-                    mousePressed->button == sf::Mouse::Button::Right)
-                    Draw(window, 1);
+                if (mousePressed->button == sf::Mouse::Button::Left) {
+                    Draw(1);
+                    sf::Vector2i _ = sf::Mouse::getPosition(window);
+                    position mousePos = { (ushort)_.x, (ushort)_.y };
+                    ProcessUI(mousePos);
+                }
+                if (mousePressed->button == sf::Mouse::Button::Right)
+                    Draw(1);
             }
-            else if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonReleased>()) {
-                if (mousePressed->button == sf::Mouse::Button::Left)
-                    Draw(window, 2);
-                else if (mousePressed->button == sf::Mouse::Button::Right)
-                    Draw(window, 3);
+            else if (const auto* mouseReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
+                if (mouseReleased->button == sf::Mouse::Button::Left)
+                    Draw(2);
+                else if (mouseReleased->button == sf::Mouse::Button::Right)
+                    Draw(3);
             }
         }
 
@@ -66,11 +68,14 @@ int main()
             sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
             if (mousePosition.x > 0 && mousePosition.y > 0)
-                Draw(window, 0);
+                Draw(0);
         }
 
-        ProcessObjects();
         ProcessCells();
-        Render(window);
+        Render();
     }
+
+    for (ushort y = 0; y < cellsY; y++)
+        delete cells[y];
+    delete cells;
 }

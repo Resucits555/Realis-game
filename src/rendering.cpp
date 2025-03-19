@@ -2,25 +2,32 @@
 
 struct position;
 struct cell;
-cell cells[cellsY][cellsX];
-static const sf::RectangleShape stdCell({cellSize, cellSize});
 
 
-void Render(sf::RenderWindow& window) {
+static void DrawUI(UIObject UI) {
+	if (UI.active) window.draw(UI.sprite);
+}
+
+
+void Render() {
 	for (int y = 0; y < cellsY; y++) {
 		for (int x = 0; x < cellsX; x++) {
-			if (!cells[y][x].type)
+			static const sf::RectangleShape stdCell({ cellSize, cellSize });
+			if (!cells[y][x].element)
 				continue;
 
 			cell& thisCell = cells[y][x];
 			sf::RectangleShape displayCell = stdCell;
 			
-			displayCell.setFillColor(elements[thisCell.type].color);
+			displayCell.setFillColor(elements[thisCell.element].color);
 			displayCell.setPosition(sf::Vector2f(cellSize*x, cellSize*y));
 
 			window.draw(displayCell);
 		}
 	}
+
+	DrawUI(bottom);
+	DrawUI(mainWindow);
 
 	window.display();
 }

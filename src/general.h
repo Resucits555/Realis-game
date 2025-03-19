@@ -2,44 +2,54 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-extern void ProcessCells();
+typedef unsigned char ubyte;
+typedef signed char sbyte;
+typedef unsigned short ushort;
 
-extern void Render(sf::RenderWindow&);
-
-extern void Draw(sf::RenderWindow&, unsigned char);
-extern unsigned char formSelected;
-extern unsigned char typeSelected;
+extern sf::RenderWindow window;
 
 
 struct position {
-	unsigned short x;
-	unsigned short y;
+    ushort x;
+    ushort y;
 };
 
 struct vector2s {
-	signed short x;
-	signed short y;
-	/*vector2s add(vector2s addend) {
-		return {(short)(x + addend.x), (short)(y + addend.y)};
-	}*/
+    short x;
+    short y;
+    /*vector2s add(vector2s addend) {
+        return {(short)(x + addend.x), (short)(y + addend.y)};
+    }*/
 };
 
 
 enum states {
-	SOLID,
-	LIQUID,
-	GAS,
-	POWDER
+    SOLID,
+    LIQUID,
+    GAS,
+    POWDER,
+    ENERGY
 };
 
 
 struct element {
-	char name[8];
-	sf::Color color;
-	unsigned char spawnState;
-	unsigned char mass;
-	//unsigned char elasticity;
-	//unsigned char hardness;
+    char name[6];
+    sf::Color color;
+    sbyte density;
+    ubyte spawnState;
+    ubyte addElement;
+
+    /*sbyte oxygen;
+    sbyte flamablity;
+    sbyte oxygenUsage;
+
+    sbyte forceDistribution;
+    sbyte conduction;
+
+    sbyte expStateLiq;
+    sbyte startTempLiq;
+    sbyte expStateGas;
+    sbyte startTempGas;*/
 };
 
 extern std::vector<element> elements;
@@ -47,23 +57,41 @@ extern std::vector<element> elements;
 
 
 struct cell {
-	position origin;
-	vector2s move;
-	unsigned char type;
-	unsigned char state;
-	unsigned short myobject;
-	vector2s linVelocity;
+    ushort temp;
+    sf::Vector2i linVelocity;
+    sbyte energy;
+    ubyte element;
+    ubyte state;
+    sbyte rad;
+
+    position origin;
+    sf::Vector2i displacement;
 };
 
-const unsigned short cellsX = 40, cellsY = 20;
-extern cell cells[cellsY][cellsX];
-const float cellSize = 40.0f;
-const cell empty = { {0,0}, {0,0}, 0, 0, 0, {0, 0} };
+extern const ushort cellsX;
+extern ushort cellsY;
+extern cell** cells;
+extern float cellSize;
 
 
 
-struct object {
-	vector2s linVelocity;
+struct UIObject {
+    sf::Sprite sprite;
+    bool active = true;
 };
 
-extern std::vector<object> objects;
+
+
+extern void Startup();
+
+extern void ProcessCells();
+
+extern void Render();
+
+extern void Draw(ubyte);
+extern ubyte formSelected;
+extern ubyte elemSelected;
+
+extern void ProcessUI(position mousePos);
+extern UIObject bottom;
+extern UIObject mainWindow;

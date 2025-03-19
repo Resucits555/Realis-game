@@ -1,24 +1,27 @@
-#include <ctime>
 #include "general.h"
 
 
 cell* thisCellGlobal;
 
-static int CheckCollision(int& x, int& y, cell& prevCell) {
+static int CheckCollision(ushort& x, ushort& y, cell& prevCell) {
     cell& thisCell = *thisCellGlobal;
     if (x >= cellsX || y >= cellsY) {
-        prevCell = thisCell;
-        prevCell.move = { 0, 0 };
-        prevCell.linVelocity = { 0, 0 };
+        cell temp = thisCell;
+        thisCell = {};
+        prevCell = temp;
+        prevCell.displacement = {};
+        prevCell.linVelocity = {};
         return 2;
     }
 
     cell& lineCell = cells[y][x];
-    if (lineCell.type) {
-        lineCell.linVelocity = thisCell.linVelocity;
-        prevCell = thisCell;
-        prevCell.move = { 0, 0 };
-        prevCell.linVelocity = { 0, 0 };
+    if (lineCell.element) {
+        cell temp = thisCell;
+        thisCell = {};
+        prevCell = temp;
+        prevCell.displacement = {};
+        //Thinks that lineCell is true when it shouldn't (particle in path already moved)
+        prevCell.linVelocity = {};
         return 1;
     }
     else {
@@ -27,7 +30,7 @@ static int CheckCollision(int& x, int& y, cell& prevCell) {
 }
 
 
-static void CheckCollisionH(int x, int y, sf::Vector2i goal) {
+static void CheckCollisionH(ushort x, ushort y, sf::Vector2i goal) {
     if (x > goal.x) {
         sf::Vector2i temp = goal;
         goal = { x, y };
@@ -42,30 +45,31 @@ static void CheckCollisionH(int x, int y, sf::Vector2i goal) {
 
     if (movement.x != 0) {
         int der = 2 * movement.y - movement.x;
-        cell* prevCell = &cells[0][0];
+        cell* prevCell = nullptr;
         int collision = 0;
 
-        for (int i = x; i <= goal.x; i++) {
+        for (ushort i = x; i <= goal.x; i++) {
             if (der >= 0) {
                 y += direction;
                 der -= 2 * movement.x;
             }
             der += 2 * movement.y;
-            if (i != x)
-                if (collision = CheckCollision(i, y, *prevCell))
-                    break;
+
+            if (i != x && (collision = CheckCollision(i, y, *prevCell)))
+                break;
             prevCell = &cells[y][i];
         }
 
         if (!collision) {
             *prevCell = *thisCellGlobal;
-            *thisCellGlobal = empty;
+            prevCell->displacement = { 0, 0 };
+            *thisCellGlobal = {};
         }
     }
 }
 
 
-static void CheckCollisionV(int x, int y, sf::Vector2i goal) {
+static void CheckCollisionV(ushort x, ushort y, sf::Vector2i goal) {
     if (y > goal.y) {
         sf::Vector2i temp = goal;
         goal = { x, y };
@@ -80,25 +84,25 @@ static void CheckCollisionV(int x, int y, sf::Vector2i goal) {
 
     if (movement.y != 0) {
         int der = 2 * movement.x - movement.y;
-        cell* prevCell = &cells[0][0];
+        cell* prevCell = nullptr;
         int collision = 0;
 
-        for (int i = y; i <= goal.y; i++) {
+        for (ushort i = y; i <= goal.y; i++) {
             if (der >= 0) {
                 x += direction;
                 der -= 2 * movement.y;
             }
             der += 2 * movement.x;
-            if (i != y)
-                if (collision = CheckCollision(x, i, *prevCell))
-                    break;
+
+            if (i != y && (collision = CheckCollision(x, i, *prevCell)))
+                break;
             prevCell = &cells[i][x];
         }
 
         if (!collision) {
             *prevCell = *thisCellGlobal;
-            prevCell->move = { 0, 0 };
-            *thisCellGlobal = empty;
+            prevCell->displacement = { 0, 0 };
+            *thisCellGlobal = {};
         }
     }
 }
@@ -106,24 +110,31 @@ static void CheckCollisionV(int x, int y, sf::Vector2i goal) {
 
 
 void ProcessCells() {
-    for (int y = 0; y < cellsY; y++) {
-        for (int x = 0; x < cellsX; x++) {
+    for (ushort y = 0; y < cellsY; y++) {
+        for (ushort x = 0; x < cellsX; x++) {
             cell& thisCell = cells[y][x];
             thisCellGlobal = &thisCell;
-            if (!thisCell.type || thisCell.type == 2)
+
+            if (!thisCell.element)
                 continue;
+
+            ubyte mass = elements[thisCell.element].density;
             
-            thisCell.linVelocity.y++;
-            thisCell.move.x += thisCell.linVelocity.x;
-            thisCell.move.y += thisCell.linVelocity.y;
+            if (thisCell.state) thisCell.linVelocity.y++;
+            thisCell.displacement.x += thisCell.linVelocity.x;
+            thisCell.displacement.y += thisCell.linVelocity.y;
 
-            unsigned char mass = elements[thisCell.type].mass;
+            sf::Vector2i movement = { thisCell.displacement.x / mass, thisCell.displacement.y / mass };
 
-            sf::Vector2i movement = { thisCell.move.x / mass, thisCell.move.y / mass };
             if (!movement.x && !movement.y)
                 continue;
 
             sf::Vector2i goal = { movement.x + x, movement.y + y };
+            if (goal.x < 0 || goal.y < 0) {
+                thisCell.linVelocity = {};
+                continue;
+            }
+
             if (std::abs(goal.x - x) > std::abs(goal.y - y))
                 CheckCollisionH(x, y, goal);
             else
