@@ -13,8 +13,8 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(main 
-src/main.cpp
 src/Startup.cpp
+src/main.cpp
 src/cells.cpp
 src/drawing.cpp
 src/UI.cpp

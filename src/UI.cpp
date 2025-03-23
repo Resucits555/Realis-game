@@ -1,6 +1,6 @@
 #include "general.h"
 
-sf::Texture mainTexture("data/UI/mainTexture.png");
+sf::Texture mainTexture("../data/UI/mainTexture.png");
 
 UIObject bottom{ sf::Sprite(mainTexture) };
 const position saveUL = { 13, 928 }, saveBR = { 55, 971 };

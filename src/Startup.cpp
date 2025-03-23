@@ -3,28 +3,27 @@
 #include "configuration.h"
 
 
-const ushort cellsX = 100;
-ushort cellsY = 0; //Do not change
-
+ushort cellsY = 0;
 float cellSize = 6;
 
 cell** cells = nullptr;
 
 std::vector<element> elements{ { "none" },
-    { "sand", sf::Color::Yellow, (sbyte)255, POWDER },
-    { "test", sf::Color::Blue, (sbyte)255, POWDER } };
+    { "sand", sf::Color::Yellow, 200, POWDER },
+    { "test", sf::Color::Blue, 200, POWDER } };
 
 unsigned char formSelected = 0;
 
-
-sf::RenderWindow window = sf::RenderWindow(sf::VideoMode({ resolution.x, resolution.y }), "Reagen");
+sf::RenderWindow window;
 
 void Startup() {
+    window = sf::RenderWindow(sf::VideoMode({ resolution.x, resolution.y }), "Reagen");
     window.setFramerateLimit(fpsLimit);
     window.setKeyRepeatEnabled(false);
 
     cellSize = (resolution.x - 100.f) / cellsX;
     cellsY = cellsX / 2.1f;
+    std::cout << "cellsY: " << cellsY << '\n';
 
     cells = new cell* [cellsY];
     for (ushort y = 0; y < cellsY; y++)

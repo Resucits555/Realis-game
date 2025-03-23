@@ -17,9 +17,9 @@ struct position {
 struct vector2s {
     short x;
     short y;
-    /*vector2s add(vector2s addend) {
+    vector2s add(vector2s addend) {
         return {(short)(x + addend.x), (short)(y + addend.y)};
-    }*/
+    }
 };
 
 
@@ -35,15 +35,16 @@ enum states {
 struct element {
     char name[6];
     sf::Color color;
-    sbyte density;
+    ushort density;
     ubyte spawnState;
     ubyte addElement;
+
+    sbyte forceDistribution;
 
     /*sbyte oxygen;
     sbyte flamablity;
     sbyte oxygenUsage;
 
-    sbyte forceDistribution;
     sbyte conduction;
 
     sbyte expStateLiq;
@@ -58,14 +59,14 @@ extern std::vector<element> elements;
 
 struct cell {
     ushort temp;
-    sf::Vector2i linVelocity;
+    vector2s linVelocity;
     sbyte energy;
     ubyte element;
     ubyte state;
     sbyte rad;
 
     position origin;
-    sf::Vector2i displacement;
+    vector2s displacement;
 };
 
 extern const ushort cellsX;

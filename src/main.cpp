@@ -39,9 +39,14 @@ int main()
                         break;
                     case sf::Keyboard::Scancode::C:
                         clearSave();
-                        break;
+                        goto skipCells;
                     case sf::Keyboard::Scancode::Escape:
-                        mainWindow.active = false;
+                        if (mainWindow.active)
+                            mainWindow.active = false;
+                        else {
+                            window.close();
+                            goto skipCells;
+                        }
                         break;
                 }
             }
@@ -72,6 +77,7 @@ int main()
         }
 
         ProcessCells();
+        skipCells:
         Render();
     }
 
