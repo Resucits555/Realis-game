@@ -20,8 +20,8 @@ static void DrawRect(ubyte elem, sf::Vector2f& max, sf::Vector2f& min) {
 ubyte elemSelected = 1;
 
 void Draw(ubyte mouseEvent) {
-    sf::Vector2f mouseCellPos = {sf::Mouse::getPosition(window).x / cellSize,
-                                 sf::Mouse::getPosition(window).y / cellSize };
+    sf::Vector2f mouseCellPos = { sf::Mouse::getPosition(window).x / cellSize,
+                                  sf::Mouse::getPosition(window).y / cellSize };
 
     sf::Vector2f max = { std::max(start.x, mouseCellPos.x), std::max(start.y, mouseCellPos.y) };
     sf::Vector2f min = { std::min(start.x, mouseCellPos.x), std::min(start.y, mouseCellPos.y) };
@@ -35,9 +35,9 @@ void Draw(ubyte mouseEvent) {
             switch (formSelected) {
                 case 0:
                     //TODO: Make this work better
-                    sf::RectangleShape mark({std::ceil(max.x - min.x) * cellSize,
-                                             std::ceil(max.y - min.y) * cellSize});
-                    mark.setPosition({ std::floor(min.x) * cellSize, std::floor(min.y) * cellSize });
+                    sf::RectangleShape mark({ceil(max.x - min.x) * cellSize,
+                                             ceil(max.y - min.y) * cellSize});
+                    mark.setPosition({ floor(min.x) * cellSize, floor(min.y) * cellSize });
                     window.draw(mark);
                     break;
             }

@@ -41,7 +41,7 @@ void Startup() {
     bottom.sprite.setPosition({ 5, 910 });
     bottom.sprite.setTextureRect(sf::IntRect({ 0, 0 }, { 637, 21 }));
 
-    mainWindow.sprite.setScale({ 6.f, 6.f });
-    mainWindow.sprite.setPosition({ 78, 78 });
-    mainWindow.sprite.setTextureRect(sf::IntRect({ 0, 20 }, { 292, 129 }));
+    bigWindow.sprite.setScale({ 6.f, 6.f });
+    bigWindow.sprite.setPosition({ 78, 78 });
+    bigWindow.sprite.setTextureRect(sf::IntRect({ 0, 20 }, { 292, 129 }));
 }

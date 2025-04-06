@@ -41,8 +41,8 @@ int main()
                         clearSave();
                         goto skipCells;
                     case sf::Keyboard::Scancode::Escape:
-                        if (mainWindow.active)
-                            mainWindow.active = false;
+                        if (bigWindow.active)
+                            bigWindow.active = false;
                         else {
                             window.close();
                             goto skipCells;
@@ -82,6 +82,6 @@ int main()
     }
 
     for (ushort y = 0; y < cellsY; y++)
-        delete cells[y];
-    delete cells;
+        delete[] cells[y];
+    delete[] cells;
 }

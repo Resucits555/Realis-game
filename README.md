@@ -55,7 +55,7 @@ Any force given to one of the cells should be distributed to the other cells and
 The amount of cells can only be changed by drawing and deleting with the mouse.
 
 Both force and velocity of a cell are represented by the same variable "linVelocity" as they're mutually exclusive:
-Only one of them is useful at a time.
+Only one of them is used at a time.
 
 Bending objects are realised with the "origin" variable. It points to the position where the cell would be if there was no pressure.
 There should always be generated a force in direction to origin based on the distance.

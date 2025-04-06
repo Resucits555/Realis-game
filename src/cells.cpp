@@ -3,8 +3,10 @@
 
 cell* thisCellGlobal = nullptr;
 const short displacementMax = 3600;
-const vector2s gravity = { 0, 30 };
-
+const vector2s gravity = { 0, 15 };
+const float drag = 0.05f;
+static constexpr float Drag(short x) { return x * drag; }
+static constexpr float InvDrag(short x) { return x * (1 - drag); }
 
 
 void ProcessCells() {
@@ -16,16 +18,18 @@ void ProcessCells() {
             if (!thisCell.element)
                 continue;
 
-            
-            
             if (thisCell.state)
                 thisCell.linVelocity = thisCell.linVelocity.add(gravity);
             thisCell.displacement.x += thisCell.linVelocity.x;
             thisCell.displacement.y += thisCell.linVelocity.y;
 
             vector2s& displ = thisCell.displacement;
+            vector2s& vel = thisCell.linVelocity;
             vector2s goal = { (short)((displ.x / displacementMax) + x),
                               (short)((displ.y / displacementMax) + y) };
+
+            if (&cells[goal.y][goal.x] == &thisCell)
+                continue;
 
             if (goal.x >= cellsX || goal.x < 0) { 
                 thisCell.linVelocity.x = 0;
@@ -38,8 +42,6 @@ void ProcessCells() {
             
 
             cell* goalCell = &cells[goal.y][goal.x];
-            if (goalCell == &thisCell)
-                continue;
 
             if (!goalCell->element) {
                 *goalCell = thisCell;
@@ -48,22 +50,26 @@ void ProcessCells() {
                 goalCell->displacement.y -= (goal.y - y) * displacementMax;
             }
             else {
-                if (!cells[y][goal.x].element) {
-                    thisCell.linVelocity.y = 0;
-                    goalCell->linVelocity.y = thisCell.linVelocity.y;
-                    cells[y][goal.x] = thisCell;
-                    thisCell = {};
-                } else if (!cells[goal.y][x].element) {
-                    thisCell.linVelocity.x = 0;
-                    goalCell->linVelocity.x = thisCell.linVelocity.x;
-                    cells[goal.y][x] = thisCell;
-                    thisCell = {};
-                }
-                else {
-                    goalCell->linVelocity = thisCell.linVelocity;
-                    thisCell.linVelocity = {};
-                    thisCell.displacement = {};
-                }
+                cell& cellx = cells[y][goal.x];
+                cell& celly = cells[goal.y][x];
+
+                if (&cellx != &thisCell)
+                    if (cellx.element) {
+                        cellx.linVelocity.x = (celly.element) ? InvDrag(vel.x) : vel.x;
+                        vel.x = 0;
+                        displ.x = displacementMax;
+
+                        cellx.linVelocity.y = Drag(vel.y);
+                    }
+
+                if (&celly != &thisCell)
+                    if (celly.element) {
+                        celly.linVelocity.y = (cellx.element) ? InvDrag(vel.y) : vel.y;
+                        vel.y = 0;
+                        displ.y = displacementMax;
+
+                        celly.linVelocity.x = Drag(vel.x);
+                    }
             }
         }
     }

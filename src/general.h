@@ -95,4 +95,4 @@ extern ubyte elemSelected;
 
 extern void ProcessUI(position mousePos);
 extern UIObject bottom;
-extern UIObject mainWindow;
+extern UIObject bigWindow;
