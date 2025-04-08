@@ -4,7 +4,7 @@
 cell* thisCellGlobal = nullptr;
 const short displacementMax = 3600;
 const vector2s gravity = { 0, 15 };
-const float drag = 0.05f;
+const constexpr float drag = 0.05f;
 static constexpr float Drag(short x) { return x * drag; }
 static constexpr float InvDrag(short x) { return x * (1 - drag); }
 
